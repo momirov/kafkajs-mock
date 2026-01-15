@@ -22,7 +22,7 @@ class MockConsumer {
 
       const subscribeTo = [...topics, topic];
 
-      subscribeTo.forEach((t) => {
+      subscribeTo.filter(t => t).forEach((t) => {
         if (topicMap.get(t)) {
           topicMap.get(t).push(this);
         } else {
