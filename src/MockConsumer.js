@@ -15,16 +15,20 @@ class MockConsumer {
     this.connect = async () => {
       this.connected = true;
     };
-    this.subscribe = async ({ topic }) => {
+    this.subscribe = async ({ topic, topics = [] }) => {
       if (!this.connected) {
         throw Error("Consumer is not connected");
       }
 
-      if (topicMap.get(topic)) {
-        topicMap.get(topic).push(this);
-      } else {
-        topicMap.set(topic, [this]);
-      }
+      const subscribeTo = [...topics, topic];
+
+      subscribeTo.forEach((t) => {
+        if (topicMap.get(t)) {
+          topicMap.get(t).push(this);
+        } else {
+          topicMap.set(t, [this]);
+        }  
+      });
     };
     this.run = async ({ eachMessage }) => {
       this.eachMessage = eachMessage;
